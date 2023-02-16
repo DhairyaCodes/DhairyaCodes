@@ -1,0 +1,586 @@
+import os
+import pickle
+import datetime
+now=datetime.datetime.now()
+
+
+def length(x,y):                           #TO CHECK THE LENGTH OF INPUT DATA.
+    c=0
+    while True:
+        z=str(x)
+        if len(z)!=y:
+            if c==2:
+                print("You have entered an invalid value three times.\nLogging out.")
+                return "Invalid"
+                break
+            else:
+                print("Please enter a proper value.")
+                x=int(input("Enter again: "))
+                c+=1
+        else:
+            break
+
+def payment(name,amt,pay,t,b='bill'):                                        #TO MAKE BILL PAYMENT FROM ACCOUNT WHEN NOT ENOUGH IN WALLET.                                                   
+    print("Not enough money in your wallet.")
+    choice1_21=input("Do you wish to make payment from your bank account(y/n)?: ")
+    if choice1_21=='y':
+        wal=subt(name,'acc',amt,pay)
+        if wal=='not possible':
+            print("Not enough money in your account.\n\n")
+            return "not possible"
+        elif wal=="unlinked":
+            return "unlinked"
+        else:
+            if b=="RE":                                                                         #b TELLS IT IS RECHARGE OR BILL
+                print("Your",t,"recharge of",amt,"is done.")
+                print("Your account balance is:",wal,end='\n\n')
+            else:
+                print("Your",t,"bill of",amt,"is paid.")
+                print("Your account balance is:",wal,end='\n\n')
+            
+def subt(name,op,amt,pay):                         #TO MAKE ALL PAYMENTS FROM WALLET AND ACCOUNT.
+    p=open("project.dat",'rb+')                       #op TELLS FROM ACCOUNT OR WALLET.
+    while True:                                                #pay TELLS WHOM TO PAY FOR TRANSACTION HISTORY
+        try:
+            loc=p.tell()
+            k=pickle.load(p)
+            if name==k[0]:
+                if op=='wal':
+                    k[4]=k[4]-amt
+                    l=k[5]
+                    s=str(amt)
+                    s1=pay+' '+s+" FROM WAL"
+                    l.append(s1)
+                    k[5]=l
+                    if k[4]<0:
+                        return "not possible"
+                        break
+                    else:
+                        p.seek(loc,0)                                   
+                        pickle.dump(k,p)
+                        p.close()
+                        return k[4]
+                        break
+                elif op=='acc':
+                    if k[2]!='N.A':
+                        k[2]=k[2]-amt
+                        l=k[5]
+                        s=str(amt)
+                        s1=pay+' '+s+" FROM ACC"
+                        l.append(s1)
+                        k[5]=l
+                        if k[2]<0:
+                            return "not possible"
+                            break
+                        else:
+                            p.seek(loc,0)                                   
+                            pickle.dump(k,p)
+                            p.close()
+                            return k[2]
+                            break
+                    else:
+                        return 'unlinked'
+                
+
+        except EOFError:
+            p.close()
+            break
+
+def reopen(name):                #TO GET UPDATED FILE INTO THE PROGRAM IF USER PERFORM MULTIPLE OPERATIONS AT THE SAME TIME.
+    l=[]
+    p=open("project.dat",'rb')
+    while True:
+        try:
+            k=pickle.load(p)
+            if k[0]==name:
+                l=k
+                break
+        except EOFError:
+            p.close()
+            break
+    return l
+
+
+def wallet(name,amt):                           #TO ADD BALANCE FROM ACCOUNT TO WALLET.
+    p=open("project.dat",'rb+')
+    while True:
+        try:
+            loc=p.tell()
+            k=pickle.load(p)
+            if name==k[0]:
+                if k[2]!='N.A':
+                    k[2]=k[2]-amt
+                    k[4]=k[4]+amt
+                    l=k[5]
+                    s=str(amt)
+                    s1="WAL ADD "+s+" FROM ACC"
+                    l.append(s1)
+                    k[5]=l
+                    if k[2]<0:
+                        return "not possible"
+                        break
+                    else:
+                        p.seek(loc,0)                                   
+                        pickle.dump(k,p)
+                        p.close()
+                        return k[4]
+                        break
+                else:
+                    return 'unlinked'
+        except EOFError:
+            p.close()
+            break 
+
+def update(name,op,new):                  #TO WRITE CARDNO AND BALANCE OF ACCOUNT INTO FILE. op TELLS IT IS CARD OR BALANCE AND new is the new value of it.
+    p=open("project.dat",'rb+')
+    while True:
+        try:
+            loc=p.tell()
+            k=pickle.load(p)
+            if name==k[0]:
+                if op=='ca':
+                    k[3]=new
+                    p.seek(loc,0)                                   
+                    pickle.dump(k,p)
+                    p.close()
+                    break
+                elif op=='ba':
+                    k[2]=new
+                    p.seek(loc,0)                                   
+                    pickle.dump(k,p)
+                    p.close()
+                    break
+                
+
+        except EOFError:
+            p.close()
+            break
+
+
+
+def type_check():                         #TO CHECK IF ENTERED DATA IS INTEGER DATA TYPE.
+    counter=0    
+    while True:
+            try:
+                val=int(input())
+                break
+            except:
+                counter+=1
+                if counter==3:
+                    print('You have attempted 3 times.\nYou are loggged out of the system.')
+                    val='notpossible'
+                    break
+                print('Enter a proper value.')
+    return val
+
+
+
+while True:
+    c=0
+    os.system('cls')
+    print('\n\n\t\t\t\t\tWelcome to your account')
+    print('\n\n\nTo Login, press "1"')
+    print('To Sign up, press "2"')
+    print('To exit, press "0"')
+    choice=input('Enter your choice:\n')
+    if choice=='1':
+        try:
+            file1=open('project.dat','rb+')
+        except:
+            file1=open('project.dat','wb+')
+            file1.close()
+            file1=open('project.dat','rb+')
+        L=[]
+        while True:
+            try:
+                k=pickle.load(file1)
+                L.append(k)
+            except EOFError:
+                break
+        file1.close()
+        a=0
+        while True:
+            name=input("Enter your name: ")
+            name=name.lower()
+            password=input("Enter your password: ")
+            for x in L:
+                if x[0]==name and x[1]==password:
+                    a=1
+                    print("You are logged in succesfully!!")
+                    while True:
+                        print('1. To link/update bank account\n2. To send money\n3. To pay bills\n4. To view Account balance, Wallet balance, and Transaction history.\n5. To add money into your wallet\n0. To exit')
+                        choice1=int(input("Enter your choice: "))
+                        if choice1==1:
+                            print("Please enter your 16-digit card number:")    
+                            cardno=type_check()
+                            if cardno=='not possible':
+                                break
+                            if length(cardno,16)=="Invalid":
+                                break
+                            update(name,'ca',cardno)
+                            print("Please enter your account balance:")
+                            bal=type_check()
+                            if bal=='not possible':
+                                break
+                            update(name,'ba',bal)
+                            print("Your bank account is successfully linked/updated!")
+                            choice1_1=input("Do you wish to continue(y/n)?: ")
+                            if choice1_1=='n':
+                                break
+                        elif choice1==2:
+                            L=reopen(name)
+                            print("Enter the 10-digit mobile number of the person to whom you wish to send the money: ")    
+                            num=type_check()
+                            if num=='not possible':
+                                break
+                            if length(num,10)=="Invalid":
+                                break
+                            print("Enter the amount you wish to send:")
+                            give=type_check()
+                            if give=='not possible':
+                                break
+                            s="SNT TO "+str(num)
+                            wal=subt(name,'wal',give,s)
+                            if wal=='not possible':
+                                print("Not enough money in your wallet.")
+                                choice1_21=input("Do you wish to send money from your bank account(y/n)?: ")
+                                if choice1_21=='y':
+                                    wal=subt(name,'acc',give,s)
+                                    if wal=='not possible':
+                                        print("Not enough money in your account.\n\n")
+                                        break
+                                    if wal=='unlinked':
+                                        print("You have not linked your bank account.\nRe-directing to the main menu to link it first.\n\n\n")
+                                    else:
+                                        print(give,"amount of money is transferred to",num)
+                                        print("Your account balance is:",wal,end='\n\n')
+                                        choice1_22=input("Do you wish to continue(y/n)?: ")
+                                        if choice1_22=='n':
+                                            break
+                            else:
+                                print(give,"amount of money is transferred to",num)
+                                print("Your wallet balance is:",wal,end='\n\n')
+                                choice1_22=input("Do you wish to continue(y/n)?: ")
+                                if choice1_22=='n':
+                                    break
+                        elif choice1==3:
+                            while True:
+                                print("1. To pay elctricity bill.\n2. To pay mobile postpaid bill.\n3. To pay credit card bill.\n4. To do prepaid recharge.\n5. To pay broadband bill.\n6. To pay water bill.\n7. To pay DTH bills/To recharge DTH.\n0. To exit.")
+                                choice1_3=int(input("Enter your choice: "))
+                                if choice1_3==1:
+                                    L=reopen(name)
+                                    print("Enter the amount of your electricity bill:")
+                                    ca=type_check()
+                                    if ca=='not possible':
+                                        break
+                                    print("Enter your 11-digit C/A number: ")
+                                    CAN=type_check()
+                                    if CAN=='not possible':
+                                        break
+                                    if length(CAN,11)=="Invalid":
+                                        break
+                                    s="ELEC"
+                                    wal=subt(name,'wal',ca,s)
+                                    if wal=='not possible':
+                                        acc=payment(name,ca,s,"electricity")
+                                        if acc=='not possible':
+                                            break
+                                        elif acc=='unlinked':
+                                            print("You have not linked your bank account.\nRe-directing to the main menu to link it first.\n\n\n")
+                                            break
+                                        else:
+                                            choice1_22=input("Do you wish to continue(y/n)?: ")
+                                            if choice1_22=='n':
+                                                break
+                                    else:
+                                        print("Your electricity bill of",ca,"is paid.")
+                                        print("Your wallet balance is:",wal,end='\n\n')
+                                        choice1_22=input("Do you wish to continue(y/n)?: ")
+                                        if choice1_22=='n':
+                                            break
+                                elif choice1_3==2:
+                                    L=reopen(name)
+                                    print("Enter the amount of your postpaid bill:")
+                                    mo=type_check()
+                                    if mo=='not possible':
+                                        break
+                                    print("Enter your 10-digit mobile number: ")
+                                    MOB=type_check()
+                                    if MOB=='not possible':
+                                        break
+                                    if length(MOB,10)=="Invalid":
+                                        break
+                                    s="MOB"
+                                    wal=subt(name,'wal',mo,s)
+                                    if wal=='not possible':
+                                        acc=payment(name,mo,s,"postpaid")
+                                        if acc=='not possible':
+                                            break
+                                        elif acc=='unlinked':
+                                            print("You have not linked your bank account.\nRe-directing to the main menu to link it first.\n\n\n")
+                                            break
+                                        else:
+                                            choice1_22=input("Do you wish to continue(y/n)?: ")
+                                            if choice1_22=='n':
+                                                break
+                                    else:
+                                        print("Your postpaid bill of",mo,"is paid.")
+                                        print("Your wallet balance is:",wal,end='\n\n')
+                                        choice1_22=input("Do you wish to continue(y/n)?: ")
+                                        if choice1_22=='n':
+                                            break
+                                elif choice1_3==3:
+                                    L=reopen(name)
+                                    print("Enter the amount of your bill:")
+                                    cc=type_check()
+                                    if cc=='not possible':
+                                        break
+                                    print("Enter your 16-digit credit card number: ")
+                                    CCN=type_check()
+                                    if CCN=='not possible':
+                                        break
+                                    if length(CCN,16)=="Invalid":
+                                        break
+                                    s="CREDCRD"
+                                    wal=subt(name,'wal',cc,s)
+                                    if wal=='not possible':
+                                        acc=payment(name,cc,s,"credit card")
+                                        if acc=='not possible':
+                                            break
+                                        elif acc=='unlinked':
+                                            print("You have not linked your bank account.\nRe-directing to the main menu to link it first.\n\n\n")
+                                            break
+                                        else:
+                                            choice1_22=input("Do you wish to continue(y/n)?: ")
+                                            if choice1_22=='n':
+                                                break
+                                    else:
+                                        print("Your credit card bill of",cc,"is paid.")
+                                        print("Your wallet balance is:",wal,end='\n\n')
+                                        choice1_22=input("Do you wish to continue(y/n)?: ")
+                                        if choice1_22=='n':
+                                            break
+                                elif choice1_3==4:
+                                    L=reopen(name)
+                                    print("Enter the amount of recharge:")
+                                    mop=type_check()
+                                    if mop=='not possible':
+                                        break
+                                    print("Enter your 10-digit mobile number: ")
+                                    MOBPRE=type_check()
+                                    if MOBPRE=='not possible':
+                                        break
+                                    if length(MOBPRE,10)=="Invalid":
+                                        break
+                                    s="MOBPRE"
+                                    wal=subt(name,'wal',mop,s)
+                                    if wal=='not possible':
+                                        acc=payment(name,mop,s,"mobile","RE")
+                                        if acc=='not possible':
+                                            break
+                                        elif acc=='unlinked':
+                                            print("You have not linked your bank account.\nRe-directing to the main menu to link it first.\n\n\n")
+                                            break
+                                        else:
+                                            choice1_22=input("Do you wish to continue(y/n)?: ")
+                                            if choice1_22=='n':
+                                                break
+                                    else:
+                                        print("Your mobile recharge of",mop,"is done.")
+                                        print("Your wallet balance is:",wal,end='\n\n')
+                                        choice1_22=input("Do you wish to continue(y/n)?: ")
+                                        if choice1_22=='n':
+                                            break
+                                elif choice1_3==5:
+                                    L=reopen(name)
+                                    BBS=input("Enter the name of your internet service provider: ")
+                                    print("Enter the amount of your broadband bill:")
+                                    bb=type_check()
+                                    if bb=='not possible':
+                                        break
+                                    print("Enter your 10-digit registered mobile number: ")
+                                    BBN=type_check()
+                                    if BBN=='not possible':
+                                        break
+                                    if length(BBN,10)=="Invalid":
+                                        break
+                                    s="BRDBND"
+                                    wal=subt(name,'wal',bb,s)
+                                    if wal=='not possible':
+                                        acc=payment(name,bb,s,BBS)
+                                        if acc=='not possible':
+                                            break
+                                        elif acc=='unlinked':
+                                            print("You have not linked your bank account.\nRe-directing to the main menu to link it first.\n\n\n")
+                                            break
+                                        else:
+                                            choice1_22=input("Do you wish to continue(y/n)?: ")
+                                            if choice1_22=='n':
+                                                break
+                                    else:
+                                        print("Your",BBS,"bill of",bb,"is paid.")
+                                        print("Your wallet balance is:",wal,end='\n\n')
+                                        choice1_22=input("Do you wish to continue(y/n)?: ")
+                                        if choice1_22=='n':
+                                            break
+                                elif choice1_3==6:
+                                    L=reopen(name)
+                                    print("Enter the amount of your water bill:")
+                                    watr=type_check()
+                                    if watr=='not possible':
+                                        break
+                                    print("Enter your 11-digit C/A number: ")
+                                    WATB=type_check()
+                                    if WATB=='not possible':
+                                        break
+                                    if length(WATB,11)=="Invalid":
+                                        break
+                                    s="WTR"
+                                    wal=subt(name,'wal',watr,s)
+                                    if wal=='not possible':
+                                        acc=payment(name,watr,s,"water")
+                                        if acc=='not possible':
+                                            break
+                                        elif acc=='unlinked':
+                                            print("You have not linked your bank account.\nRe-directing to the main menu to link it first.\n\n\n")
+                                            break
+                                        else:
+                                            choice1_22=input("Do you wish to continue(y/n)?: ")
+                                            if choice1_22=='n':
+                                                break
+                                    else:
+                                        print("Your water bill of",watr,"is paid.")
+                                        print("Your wallet balance is:",wal,end='\n\n')
+                                        choice1_22=input("Do you wish to continue(y/n)?: ")
+                                        if choice1_22=='n':
+                                            break
+                                elif choice1_3==7:
+                                    L=reopen(name)
+                                    DTHS=input("Enter the name of your DTH service provider: ")
+                                    print("Enter the amount of your DTH bill:")
+                                    dth=type_check()
+                                    if dth=='not possible':
+                                        break
+                                    print("Enter your 10-digit registered mobile number: ")
+                                    DTHN=type_check()
+                                    if DTHN=='not possible':
+                                        break
+                                    if length(DTHN,10)=="Invalid":
+                                        break
+                                    s="DTH"
+                                    wal=subt(name,'wal',dth,s)
+                                    if wal=='not possible':
+                                        acc=payment(name,dth,s,DTHS,"RE")
+                                        if acc=='not possible':
+                                            break
+                                        elif acc=='unlinked':
+                                            print("You have not linked your bank account.\nRe-directing to the main menu to link it first.\n\n\n")
+                                            break
+                                        else:
+                                            choice1_22=input("Do you wish to continue(y/n)?: ")
+                                            if choice1_22=='n':
+                                                break
+                                    else:
+                                        print("Your",DTHS,"recharge of",dth,"is done.")
+                                        print("Your wallet balance is:",wal,end='\n\n')
+                                        choice1_22=input("Do you wish to continue(y/n)?: ")
+                                        if choice1_22=='n':
+                                            break
+                                elif choice1_3==0:
+                                        print("Exiting")
+                                        break
+                                else:
+                                    print("Enter a proper value.")
+                                
+                        elif choice1==4:
+                            x=reopen(name)
+                            print("\n\nYou wallet balance is: ",x[4])
+                            if x[2]=="N.A":
+                                print("You have not linked your bank account")
+                            else:
+                                print("Your Card number is:",x[3])
+                                print("Your account balance is: ",x[2])
+                            if x[5]==[]:
+                                print("\nYou have not made any transactions")
+                            else:
+                                print("\n\nYour transaction history is as follows:")
+                                for i in (x[5]):
+                                    print(i)
+
+                            choice1_4=input("\n\nDo you wish to continue(y/n)?: ")
+                            if choice1_4=='n':
+                                break
+                        elif choice1==5:
+                            print("Enter the amount of money you want to transfer into your wallet from your bank account:")
+                            amt=type_check()
+                            if amt=='not possible':
+                                        break
+                            k=wallet(name,amt)
+                            if k=='not possible':
+                                print("You do not have enough money in your bank account.\nTry again.\n\n")
+                            elif k=="unlinked":
+                                print("You have not linked your bank account.\nRe-directing to the main menu to link it first.\n\n\n")
+                            else:
+                                print(amt,"amount of money is added to yor wallet")
+                                print("Your wallet balance is:",k)
+                                choice1_5=input("\nDo you wish to continue(y/n)?: ")
+                                if choice1_5=='n':
+                                    break
+                        elif choice1==0:
+                            a=2
+                            print("Exiting and Logging out")
+                            break
+                        else:
+                            print("Please enter a proper value.")
+                            
+                            
+                    break                                #TO BREAK THE FOR LOOP IN ASSOCIATION WITH THE WHILE LOOP3
+
+            if a==0:
+                c=c+1
+                print("Username or password incorrect.\nPlease try again.")
+                if c==3:
+                    print("\n\n\nYou have attempted three times.\nRedirecting to the main menu.")
+                    break                                #TO BREAK INNER WHILE LOOP
+
+            else:
+                break                         #IF USER IS EXITING THEN BREAK INNER WHILE AUTOMATICALLY
+        if a==2:                              #IF USER IS EXITING THEN COMPLETE EXIT BUT IF PASSWORD IS INCORRECT OR ANY OTHER WAY OF EXITING THEN TO THE MAIN MENU THEN MAIN MENU.
+            break
+                        
+
+                    
+        
+    elif choice=='2':
+        p=open("project.dat",'ab+')
+        name=input("Please enter your name: ")
+        print("Please Verify that you are atleast 18 years old\nEnter your Year of Birth")
+        dob=type_check()
+        if dob=='notpossible':
+            print("Please enter a proper value.")
+            p.close()
+            continue
+        elif (now.year-dob)<18:
+            print('You are not eligible for the account.')
+            continue
+        else:
+            L=[]
+            L.append(name.lower())
+            password=input("Enter a password for your account: ")
+            L.append(password)
+            bal='N.A'
+            cardno=0
+            wBal=0
+            hist=[]
+            L.append(bal)
+            L.append(cardno)
+            L.append(wBal)
+            L.append(hist)
+            print("Account created successfully!")
+            pickle.dump(L,p)
+            p.close()
+    elif choice=='0':
+        print("You have been exited")
+        break
+    else:
+        print('Sorry, wrong option.\nPlease try again.\n')
