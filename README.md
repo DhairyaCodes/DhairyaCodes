@@ -3,7 +3,7 @@
 
 
 # 💫 About Me:
-🌱 I’m currently learning Machine Learning and Deep Learning<br><br>💬 Ask me about Machine Learning, Deep Learning, Flutter App Development<br><br>📫 How to reach me dhairya2arora@gmail.com<br><br>📄 Know about my experiences https://drive.google.com/file/d/1BwZVDHO8tibJp6XE_KWK4buA86s2EaYn/view?usp=sharing
+🌱 I’m currently learning Machine Learning and Deep Learning<br><br>💬 Ask me about Machine Learning, Deep Learning, Flutter App Development<br><br>📫 How to reach me dhairya2arora@gmail.com<br><br>📄 Know about my experiences https://drive.google.com/file/d/1wLODst6a1thIRjE_4ekvAJowEo4IosmM/view
 
 
 ## 🌐 Socials:
