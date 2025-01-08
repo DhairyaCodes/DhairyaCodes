@@ -3,15 +3,14 @@
 
 
 # 💫 About Me:
-🌱 I’m currently learning Machine Learning and Deep Learning<br><br>💬 Ask me about Machine Learning, Deep Learning, Flutter App Development<br><br>📫 How to reach me dhairya2arora@gmail.com<br><br>📄 Know about my experiences https://drive.google.com/file/d/1wLODst6a1thIRjE_4ekvAJowEo4IosmM/view
+🌱 I’m currently learning Machine Learning and Deep Learning<br><br>💬 Ask me about Machine Learning, Deep Learning, Flutter App Development<br><br>📫 How to reach me dhairya2arora@gmail.com<br><br>📄 Know about my experiences https://www.dhairyarora.me/
 
 
 ## 🌐 Socials:
 <p align="left">
-<a href="https://twitter.com/dhairyarora" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/twitter.svg" alt="dhairyarora" height="30" width="40" /></a>
 <a href="https://linkedin.com/in/dhairyarora" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="dhairyarora" height="30" width="40" /></a>
-<a href="https://kaggle.com/dhairyaarora2" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/kaggle.svg" alt="dhairyaarora2" height="30" width="40" /></a>
 <a href="https://www.leetcode.com/dhairya_arora2" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/leet-code.svg" alt="dhairya_arora2" height="30" width="40" /></a>
+<a href="https://twitter.com/dhairyarora" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/twitter.svg" alt="dhairyarora" height="30" width="40" /></a>
 <a href="https://auth.geeksforgeeks.org/user/dhairyarzj1/profile" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/geeks-for-geeks.svg" alt="dhairyarzj1/profile" height="30" width="40" /></a>
 </p>
 
