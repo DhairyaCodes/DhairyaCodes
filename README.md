@@ -2,7 +2,7 @@
 <h3 align="center">Machine Learning Engineer | Computer Vision | VLMs | Production ML</h3>
 
 # 💫 About Me:
-💼 Machine Learning Engineer working at Aftershoot on **computer vision systems for photo culling and image understanding**.<br><br>
+💼 Machine Learning Engineer working at **Aftershoot**.<br><br>
 🎓 B.Tech in Information Technology from **USICT, GGSIPU**.<br><br>
 🧠 Currently building ML systems around **duplicate image clustering, saliency/key-subject detection, VLM efficiency, and on-device model deployment**.<br><br>
 ⚡ I like taking models beyond notebooks: **PyTorch → ONNX → Core ML**, parity checks, latency optimization, caching, and production-ready inference.<br><br>
